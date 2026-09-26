@@ -55,9 +55,9 @@ export const HomePage = ({
         return (
           <RunwayReelsShowcase
             key="runway_reels"
-            onSelectProduct={onSelectProduct}
             onNavigateDiscover={onNavigateDiscover}
-            onQuickAdd={onQuickAdd}
+            onNavigateShop={onNavigateShop}
+            onNavigateLookbook={onNavigateLookbook}
           />
         );
 
@@ -314,9 +314,9 @@ export const HomePage = ({
       {!activeSections.some(s => s.id === 'runway_reels') && (
         <RunwayReelsShowcase
           key="runway_reels_fallback"
-          onSelectProduct={onSelectProduct}
           onNavigateDiscover={onNavigateDiscover}
-          onQuickAdd={onQuickAdd}
+          onNavigateShop={onNavigateShop}
+          onNavigateLookbook={onNavigateLookbook}
         />
       )}
     </div>

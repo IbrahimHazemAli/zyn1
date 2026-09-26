@@ -74,7 +74,7 @@ export const CategoryGrid = ({ onSelectCategory, onNavigateShop }) => {
           ? 'اكتشفي أحدث إبداعات وتصاميم سناريا فاشن الفاخرة.'
           : 'Discover the latest pieces from Sanaria Fashion.',
         btnText: isRtl ? 'استكشفي أحدث القطع' : 'EXPLORE NEW ARRIVALS',
-        media: resolveMedia('new_arrivals', newProduct, '/videos/showcase-couture-6998.mp4'),
+        media: resolveMedia('new_arrivals', newProduct, '/videos/showcase-6938.mp4'),
         isWide: true, // Left wide in row 1
         associatedProduct: newProduct
       },
@@ -113,7 +113,7 @@ export const CategoryGrid = ({ onSelectCategory, onNavigateShop }) => {
           ? 'تصاميم مختارة بعناية فائقة تمثل جوهر وبصمة سناريا.'
           : 'Discover selected pieces that define Sanaria.',
         btnText: isRtl ? 'استكشفي المجموعة' : 'EXPLORE COLLECTION',
-        media: resolveMedia('signature_collection', signatureProduct, '/videos/showcase-ensemble-6931.mp4'),
+        media: resolveMedia('signature_collection', signatureProduct, '/videos/showcase-7051.mp4'),
         isWide: true, // Right wide in row 2
         associatedProduct: signatureProduct
       }

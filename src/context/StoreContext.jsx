@@ -93,33 +93,33 @@ const INITIAL_CMS = {
 
 export const DEFAULT_EDITORIAL_PLACEMENTS = {
   new_arrivals: {
-    videoUrl: '/videos/showcase-couture-6998.mp4',
-    title: 'New Arrivals',
+    videoUrl: '/videos/showcase-6938.mp4',
+    title: 'New Arrivals - Collection 6938',
     productId: null
   },
   evening_edit: {
     videoUrl: '/videos/showcase-runway-6998.mp4',
-    title: 'The Evening Edit',
+    title: 'The Evening Edit - Runway 6998',
     productId: null
   },
   everyday_essentials: {
     videoUrl: '/videos/showcase-jacket-6768.mp4',
-    title: 'Everyday Essentials',
+    title: 'Everyday Essentials - Jacket 6768',
     productId: null
   },
   signature_collection: {
-    videoUrl: '/videos/showcase-ensemble-6931.mp4',
-    title: 'Signature Collection',
+    videoUrl: '/videos/showcase-7051.mp4',
+    title: 'Signature Collection - Model 7051',
     productId: null
   },
   runway_reels: {
-    videoUrl: '',
+    videoUrl: '/videos/showcase-7051.mp4',
     title: 'Runway Reels Showcase',
     productId: null
   },
   hero_banner: {
-    videoUrl: '',
-    title: 'Hero Banner',
+    videoUrl: '/videos/showcase-couture-6998.mp4',
+    title: 'Hero Banner - Couture 6998',
     productId: null
   }
 };
@@ -496,9 +496,13 @@ export const StoreProvider = ({ children }) => {
     });
   };
 
-  // 11. ADMIN AUTH STATE
+  // 11. ADMIN AUTH STATE (Safe storage access)
   const [adminToken, setAdminToken] = useState(() => {
-    return sessionStorage.getItem('sanaria_admin_session') || null;
+    try {
+      return sessionStorage.getItem('sanaria_admin_session') || null;
+    } catch {
+      return null;
+    }
   });
 
   // --- PERSISTENCE EFFECTS ---
@@ -1261,19 +1265,27 @@ export const StoreProvider = ({ children }) => {
     localStorage.removeItem('sanaria_discover_config');
   };
 
-  // Admin Auth Logic
+  // Admin Auth Logic with safe error handling
   const loginAdmin = (username, password) => {
-    if ((username === 'admin' || username === 'sanaria') && password === 'sanaria1992') {
+    const cleanUser = String(username || '').trim().toLowerCase();
+    const cleanPass = String(password || '').trim();
+    if ((cleanUser === 'admin' || cleanUser === 'sanaria') && cleanPass === 'sanaria1992') {
       const token = `sanaria_adm_token_${Date.now()}_${Math.random().toString(36).substring(2)}`;
-      sessionStorage.setItem('sanaria_admin_session', token);
+      try {
+        sessionStorage.setItem('sanaria_admin_session', token);
+      } catch (e) {
+        console.warn('sessionStorage restricted:', e);
+      }
       setAdminToken(token);
       return { success: true };
     }
-    return { success: false, error: 'Invalid credentials. Please try again.' };
+    return { success: false, error: 'اسم المستخدم أو كلمة المرور غير صحيحة • Invalid credentials' };
   };
 
   const logoutAdmin = () => {
-    sessionStorage.removeItem('sanaria_admin_session');
+    try {
+      sessionStorage.removeItem('sanaria_admin_session');
+    } catch (e) {}
     setAdminToken(null);
   };
 

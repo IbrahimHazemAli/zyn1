@@ -134,28 +134,34 @@ const compressImageFile = (file, maxWidth = 1200, quality = 0.82) => {
 };
 
 const AdminDashboard = ({ onBackToStore, onNavigate, onSelectProduct }) => {
+  const store = useStore();
   const {
     isAdminAuthenticated,
     logoutAdmin,
-    products,
+    products = [],
     addProduct,
     updateProduct,
     deleteProduct,
     toggleHideProduct,
     updateSizeStock,
-    orders,
+    orders = [],
     updateOrderStatus,
     deleteOrder,
-    customers,
+    customers = [],
     acceptCustomer,
     deleteCustomer,
     updateCustomer,
     addCustomer,
-    businessSettings,
+    businessSettings = {},
     addDiscoverProduct,
-    editorialPlacements,
+    editorialPlacements = {},
     updateEditorialPlacement
-  } = useStore();
+  } = store || {};
+
+  // Bulletproof safety arrays to prevent any undefined/null crash
+  const safeOrders = Array.isArray(orders) ? orders : [];
+  const safeProducts = Array.isArray(products) ? products : [];
+  const safeCustomers = Array.isArray(customers) ? customers : [];
 
   const { showToast } = useToast();
 
@@ -212,14 +218,15 @@ const AdminDashboard = ({ onBackToStore, onNavigate, onSelectProduct }) => {
   // --- STATS COMPUTATION ---
   const stats = useMemo(() => {
     const today = new Date().toISOString().slice(0, 10);
-    const todayOrders = orders.filter(o => o.date && o.date.slice(0, 10) === today);
-    const pendingOrders = orders.filter(o => !o.status || o.status === 'pending' || o.status === 'new' || o.status === 'preparing');
-    const pendingCustomers = (customers || []).filter(c => c.status === 'pending' || !c.status);
-    const acceptedCustomers = (customers || []).filter(c => c.status === 'accepted');
+    const todayOrders = safeOrders.filter(o => o && o.date && String(o.date).slice(0, 10) === today);
+    const pendingOrders = safeOrders.filter(o => !o || !o.status || o.status === 'pending' || o.status === 'new' || o.status === 'preparing');
+    const pendingCustomers = safeCustomers.filter(c => !c || c.status === 'pending' || !c.status);
+    const acceptedCustomers = safeCustomers.filter(c => c && c.status === 'accepted');
     
     // Low stock limit: 5 units or less
     const lowStockItems = [];
-    products.forEach(p => {
+    safeProducts.forEach(p => {
+      if (!p) return;
       if (p.sizeStock) {
         Object.entries(p.sizeStock).forEach(([size, qty]) => {
           if (qty > 0 && qty <= 5) {
@@ -231,25 +238,26 @@ const AdminDashboard = ({ onBackToStore, onNavigate, onSelectProduct }) => {
       }
     });
 
-    const outOfStockCount = products.filter(p => (p.stock || 0) <= 0).length;
+    const outOfStockCount = safeProducts.filter(p => !p || (p.stock || 0) <= 0).length;
 
     return {
       todayCount: todayOrders.length,
-      todayRevenue: todayOrders.reduce((sum, o) => sum + (o.total || 0), 0),
+      todayRevenue: todayOrders.reduce((sum, o) => sum + (o?.total || 0), 0),
       pendingCount: pendingOrders.length,
-      totalProducts: products.length,
+      totalProducts: safeProducts.length,
       lowStockList: lowStockItems,
       lowStockCount: lowStockItems.length,
       outOfStockCount,
-      customersCount: (customers || []).length,
+      customersCount: safeCustomers.length,
       pendingCustomersCount: pendingCustomers.length,
       acceptedCustomersCount: acceptedCustomers.length
     };
-  }, [orders, products, customers]);
+  }, [safeOrders, safeProducts, safeCustomers]);
 
   // Filtered Customers for Directory View
   const filteredCustomers = useMemo(() => {
-    return (customers || []).filter(cust => {
+    return safeCustomers.filter(cust => {
+      if (!cust) return false;
       const q = customerSearch.trim().toLowerCase();
       if (q) {
         const nameMatch = (cust.fullName || cust.name || '').toLowerCase().includes(q);
@@ -266,7 +274,7 @@ const AdminDashboard = ({ onBackToStore, onNavigate, onSelectProduct }) => {
       }
       return true;
     });
-  }, [customers, customerSearch, customerFilter]);
+  }, [safeCustomers, customerSearch, customerFilter]);
 
   // Total Stock Calculated for Form
   const formTotalStock = useMemo(() => {
@@ -646,7 +654,8 @@ const AdminDashboard = ({ onBackToStore, onNavigate, onSelectProduct }) => {
 
   // Filtered Orders List
   const filteredOrders = useMemo(() => {
-    return orders.filter(ord => {
+    return safeOrders.filter(ord => {
+      if (!ord) return false;
       // Status filter
       if (orderFilter !== 'all') {
         const status = (ord.status || 'new').toLowerCase();
@@ -664,11 +673,12 @@ const AdminDashboard = ({ onBackToStore, onNavigate, onSelectProduct }) => {
       }
       return true;
     });
-  }, [orders, orderFilter, globalSearch]);
+  }, [safeOrders, orderFilter, globalSearch]);
 
   // Filtered Products List
   const filteredProducts = useMemo(() => {
-    return products.filter(p => {
+    return safeProducts.filter(p => {
+      if (!p) return false;
       // Category filter
       if (productCategoryFilter !== 'all' && p.category !== productCategoryFilter) {
         return false;
@@ -688,7 +698,7 @@ const AdminDashboard = ({ onBackToStore, onNavigate, onSelectProduct }) => {
       // Search query
       if (globalSearch.trim()) {
         const query = globalSearch.toLowerCase();
-        const pName = typeof p.name === 'object' ? (p.name.ar + ' ' + p.name.en).toLowerCase() : String(p.name).toLowerCase();
+        const pName = typeof p.name === 'object' ? ((p.name?.ar || '') + ' ' + (p.name?.en || '')).toLowerCase() : String(p.name || '').toLowerCase();
         const sku = String(p.sku || '').toLowerCase();
         const cat = String(p.category || '').toLowerCase();
         const modelCode = String(p.modelCode || '').toLowerCase();
@@ -696,7 +706,7 @@ const AdminDashboard = ({ onBackToStore, onNavigate, onSelectProduct }) => {
       }
       return true;
     });
-  }, [products, productCategoryFilter, productStockFilter, globalSearch]);
+  }, [safeProducts, productCategoryFilter, productStockFilter, globalSearch]);
 
   const formatPrice = (amount) => {
     return Number(amount || 0).toLocaleString() + ' د.ع';
@@ -4888,14 +4898,135 @@ const AdminDashboard = ({ onBackToStore, onNavigate, onSelectProduct }) => {
   );
 };
 
+// Graceful Error Boundary: Eliminates any possibility of a white screen
+class AdminErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('Admin Portal Error Caught:', error, errorInfo);
+  }
+
+  handleReload = () => {
+    window.location.reload();
+  };
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div
+          style={{
+            minHeight: '100vh',
+            backgroundColor: '#0A0A0A',
+            color: '#FAF8F5',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '24px',
+            fontFamily: "'Segoe UI', Roboto, sans-serif"
+          }}
+        >
+          <div
+            style={{
+              maxWidth: '520px',
+              width: '100%',
+              backgroundColor: '#161616',
+              border: '1px solid rgba(197, 168, 128, 0.4)',
+              borderRadius: '16px',
+              padding: '36px 28px',
+              textAlign: 'center',
+              boxShadow: '0 25px 60px rgba(0,0,0,0.6)'
+            }}
+          >
+            <div
+              style={{
+                width: '56px',
+                height: '56px',
+                borderRadius: '50%',
+                backgroundColor: 'rgba(239, 68, 68, 0.15)',
+                color: '#EF4444',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 16px auto'
+              }}
+            >
+              <AlertTriangle size={28} />
+            </div>
+
+            <h2 style={{ fontSize: '1.3rem', fontWeight: 800, margin: '0 0 10px 0', color: '#FFFFFF' }}>
+              بوابة إدارة المتجر • Staff Admin Portal
+            </h2>
+
+            <p style={{ fontSize: '0.88rem', color: '#A19D95', lineHeight: 1.6, margin: '0 0 24px 0' }}>
+              تم استعادة بوابة الإدارة بنجاح وتفادي ظهور الشاشة البيضاء. يمكنك إعادة تحميل الصفحة أو العودة للمتجر مباشرة.
+            </p>
+
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <button
+                onClick={this.handleReload}
+                style={{
+                  padding: '11px 22px',
+                  backgroundColor: '#C5A880',
+                  color: '#0A0A0A',
+                  border: 'none',
+                  borderRadius: '8px',
+                  fontSize: '0.88rem',
+                  fontWeight: 700,
+                  cursor: 'pointer'
+                }}
+              >
+                تحديث الصفحة
+              </button>
+
+              {this.props.onBackToStore && (
+                <button
+                  onClick={this.props.onBackToStore}
+                  style={{
+                    padding: '11px 20px',
+                    backgroundColor: 'transparent',
+                    color: '#FAF8F5',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    borderRadius: '8px',
+                    fontSize: '0.88rem',
+                    cursor: 'pointer'
+                  }}
+                >
+                  العودة للمتجر الرئيسي
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
 export const AdminPage = ({ onBackToStore, onNavigate, onSelectProduct }) => {
   const { isAdminAuthenticated } = useStore();
 
-  if (!isAdminAuthenticated) {
-    return <AdminLogin onBackToStore={onBackToStore} />;
-  }
-
-  return <AdminDashboard onBackToStore={onBackToStore} onNavigate={onNavigate} onSelectProduct={onSelectProduct} />;
+  return (
+    <AdminErrorBoundary onBackToStore={onBackToStore}>
+      {!isAdminAuthenticated ? (
+        <AdminLogin onBackToStore={onBackToStore} />
+      ) : (
+        <AdminDashboard
+          onBackToStore={onBackToStore}
+          onNavigate={onNavigate}
+          onSelectProduct={onSelectProduct}
+        />
+      )}
+    </AdminErrorBoundary>
+  );
 };
 
 export default AdminPage;

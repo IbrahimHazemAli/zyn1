@@ -30,8 +30,17 @@ export function App() {
   const { showLanguageGate, showChangeModal, closeChangeLanguageModal } = useLanguage();
   const { products } = useStore();
 
-  // Navigation State
-  const [currentPage, setCurrentPage] = useState('home');
+  // Navigation State with immediate admin hash detection
+  const [currentPage, setCurrentPage] = useState(() => {
+    if (typeof window === 'undefined') return 'home';
+    const isDirectAdmin = window.location.pathname.includes('/admin') || window.location.hash.includes('admin');
+    if (isDirectAdmin) return 'admin';
+    const hash = (window.location.hash || '').replace('#', '');
+    if (hash === 'stores' || hash === 'lookbook' || hash === 'shop' || hash === 'checkout' || hash === 'discover' || hash === 'favorites') {
+      return hash;
+    }
+    return 'home';
+  });
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [completedOrder, setCompletedOrder] = useState(null);
@@ -58,11 +67,38 @@ export function App() {
 
   const { addToCart, openCart } = useCart();
 
-  // Check URL query / path for direct admin access
+  // Synchronize URL hash & path with currentPage in real-time
   useEffect(() => {
-    if (window.location.pathname.includes('/admin') || window.location.hash.includes('admin')) {
-      setCurrentPage('admin');
-    }
+    const handleUrlChange = () => {
+      const hash = window.location.hash || '';
+      const path = window.location.pathname || '';
+      if (hash.includes('admin') || path.includes('/admin')) {
+        setCurrentPage('admin');
+        setShowWalkthrough(false);
+      } else if (hash.includes('stores')) {
+        setCurrentPage('stores');
+      } else if (hash.includes('lookbook')) {
+        setCurrentPage('lookbook');
+      } else if (hash.includes('shop')) {
+        setCurrentPage('shop');
+      } else if (hash.includes('checkout')) {
+        setCurrentPage('checkout');
+      } else if (hash.includes('discover')) {
+        setCurrentPage('discover');
+      } else if (hash.includes('favorites')) {
+        setCurrentPage('favorites');
+      } else if (hash === '' || hash === '#' || hash === '#home') {
+        setCurrentPage(prev => (prev === 'admin' ? 'home' : prev));
+      }
+    };
+
+    handleUrlChange();
+    window.addEventListener('hashchange', handleUrlChange);
+    window.addEventListener('popstate', handleUrlChange);
+    return () => {
+      window.removeEventListener('hashchange', handleUrlChange);
+      window.removeEventListener('popstate', handleUrlChange);
+    };
   }, []);
 
   const navigateTo = (page, params = {}) => {
@@ -71,6 +107,18 @@ export function App() {
     }
     if (params.category) {
       setSelectedCategory(params.category);
+    }
+    if (page === 'admin') {
+      window.location.hash = 'admin';
+      setShowWalkthrough(false);
+    } else if (page === 'home') {
+      if (window.location.hash.includes('admin')) {
+        window.location.hash = '';
+      }
+    } else {
+      if (window.location.hash.includes('admin')) {
+        window.location.hash = page;
+      }
     }
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -145,18 +193,18 @@ export function App() {
 
   return (
     <div className="sanaria-app" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      {/* 1. MANDATORY FORCED FIRST-TIME LANGUAGE SELECTION */}
-      {showLanguageGate && !showWalkthrough && (
+      {/* 1. MANDATORY FORCED FIRST-TIME LANGUAGE SELECTION (Bypassed for Admin Portal) */}
+      {showLanguageGate && !showWalkthrough && currentPage !== 'admin' && (
         <LanguageGateModal isChangeMode={false} />
       )}
 
-      {/* 2. CHANGE LANGUAGE MODAL (WHEN REQUESTED) */}
-      {showChangeModal && (
+      {/* 2. CHANGE LANGUAGE MODAL (WHEN REQUESTED - Bypassed for Admin Portal) */}
+      {showChangeModal && currentPage !== 'admin' && (
         <LanguageGateModal isChangeMode={true} onClose={closeChangeLanguageModal} />
       )}
 
-      {/* 3. PROFESSIONAL SANARIA WALKTHROUGH INTRO */}
-      {showWalkthrough && (
+      {/* 3. PROFESSIONAL SANARIA WALKTHROUGH INTRO (Bypassed for Admin Portal) */}
+      {showWalkthrough && currentPage !== 'admin' && (
         <SplashWalkthrough onComplete={() => setShowWalkthrough(false)} />
       )}
 

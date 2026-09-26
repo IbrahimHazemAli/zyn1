@@ -19,10 +19,12 @@ import {
 import { getAssetUrl } from '../../utils/assetHelper';
 
 const BOUTIQUE_ARCHIVE_VIDEOS = [
-  { id: 'couture-6998', name: 'إطلالة كوتور الملكية - كود 6998', url: '/videos/showcase-couture-6998.mp4' },
+  { id: 'collection-6938', name: 'إطلالة كولكشن سناريا - كود 6938 🔥', url: '/videos/showcase-6938.mp4' },
+  { id: 'collection-7051', name: 'فستان سناريا الحصري - كود 7051 🇮🇶', url: '/videos/showcase-7051.mp4' },
+  { id: 'couture-6998', name: 'إطلالة كوتور الملكية - كود 6998 ✨', url: '/videos/showcase-couture-6998.mp4' },
   { id: 'jacket-6768', name: 'جاكيت فاخر مفصل - كود 6768', url: '/videos/showcase-jacket-6768.mp4' },
   { id: 'ensemble-6931', name: 'طقم كاجوال شيك - كود 6931', url: '/videos/showcase-ensemble-6931.mp4' },
-  { id: 'runway-6998', name: 'إطلالة عروض المنصة - كود 6998', url: '/videos/showcase-runway-6998.mp4' }
+  { id: 'runway-6998', name: 'إطلالة عروض المنصة - كود 6998 🎬', url: '/videos/showcase-runway-6998.mp4' }
 ];
 
 export const VideoPlacementsManager = ({ onBackToStore, onNavigate }) => {
@@ -45,7 +47,7 @@ export const VideoPlacementsManager = ({ onBackToStore, onNavigate }) => {
       badge: 'اللوحة 1 (عريضة) • Feature 1',
       titleAr: 'لوحة "وصل حديثاً" • NEW ARRIVALS',
       subtitleAr: 'اللوحة التحريرية الرئيسية الأولى في قسم مختارات سناريا الفاخرة (The Sanaria Edit).',
-      defaultVideo: '/videos/showcase-couture-6998.mp4',
+      defaultVideo: '/videos/showcase-6938.mp4',
       targetCategory: 'new'
     },
     {
@@ -69,7 +71,7 @@ export const VideoPlacementsManager = ({ onBackToStore, onNavigate }) => {
       badge: 'اللوحة 4 (عريضة) • Feature 4',
       titleAr: 'لوحة "المجموعة الأيقونية" • SIGNATURE COLLECTION',
       subtitleAr: 'لوحة التصاميم الأيقونية التي تمثل توقيع وبصمة سناريا منذ 1992.',
-      defaultVideo: '/videos/showcase-ensemble-6931.mp4',
+      defaultVideo: '/videos/showcase-7051.mp4',
       targetCategory: 'all'
     },
     {
@@ -85,7 +87,7 @@ export const VideoPlacementsManager = ({ onBackToStore, onNavigate }) => {
       badge: 'عروض المنصة • Runway Reels',
       titleAr: 'شريط عروض المنصة • RUNWAY REELS SHOWCASE',
       subtitleAr: 'الفيديو البارز في قسم فيديوهات عروض المنصة التفاعلية.',
-      defaultVideo: '',
+      defaultVideo: '/videos/showcase-7051.mp4',
       targetCategory: 'dresses'
     }
   ];
