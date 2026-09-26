@@ -9,6 +9,7 @@ import { InstagramFeed } from '../components/home/InstagramFeed';
 import { useStore } from '../context/StoreContext';
 import { useLanguage } from '../context/LanguageContext';
 import { ArrowRight, Compass } from 'lucide-react';
+import { getAssetUrl } from '../utils/assetHelper';
 
 export const HomePage = ({
   onNavigateShop,
@@ -136,7 +137,7 @@ export const HomePage = ({
                   }}
                 >
                   <video
-                    src={products.find(p => p.videoUrl && p.videoUrl.trim() !== '')?.videoUrl || '/videos/showcase-couture-6998.mp4'}
+                    src={getAssetUrl(products.find(p => p.videoUrl && p.videoUrl.trim() !== '')?.videoUrl || '/videos/showcase-couture-6998.mp4')}
                     autoPlay
                     loop
                     muted
@@ -199,7 +200,7 @@ export const HomePage = ({
               />
             ) : (
               <video
-                src="/videos/showcase-runway-6998.mp4"
+                src={getAssetUrl('/videos/showcase-runway-6998.mp4')}
                 autoPlay
                 loop
                 muted

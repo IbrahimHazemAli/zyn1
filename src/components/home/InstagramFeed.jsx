@@ -1,7 +1,9 @@
 import React from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useStore } from '../../context/StoreContext';
-import { Instagram, ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
+import { InstagramIcon } from '../common/SocialIcons';
+import { getAssetUrl } from '../../utils/assetHelper';
 
 export const InstagramFeed = () => {
   const { t, language } = useLanguage();
@@ -87,7 +89,7 @@ export const InstagramFeed = () => {
               letterSpacing: '0.08em'
             }}
           >
-            <Instagram size={15} color="var(--color-gold-dark)" />
+            <InstagramIcon size={15} color="var(--color-gold-dark)" />
             <span>{businessSettings.instagram}</span>
             <ArrowUpRight size={13} />
           </a>
@@ -118,7 +120,7 @@ export const InstagramFeed = () => {
             >
               {post.type === 'video' ? (
                 <video
-                  src={post.video}
+                  src={getAssetUrl(post.video)}
                   autoPlay
                   loop
                   muted
@@ -132,7 +134,7 @@ export const InstagramFeed = () => {
                 />
               ) : (
                 <img
-                  src={post.img}
+                  src={getAssetUrl(post.img)}
                   alt="Sanaria Instagram"
                   style={{
                     width: '100%',
@@ -182,7 +184,7 @@ export const InstagramFeed = () => {
                 }}
                 className="insta-overlay"
               >
-                <Instagram size={28} color="#C5A880" style={{ marginBottom: '8px' }} />
+                <InstagramIcon size={28} color="#C5A880" style={{ marginBottom: '8px' }} />
                 <span style={{ fontSize: '0.75rem', letterSpacing: '0.1em', marginBottom: '6px' }}>
                   @sanaria.fashion
                 </span>

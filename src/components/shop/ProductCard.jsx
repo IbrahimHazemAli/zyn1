@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { Plus, Eye, ArrowUpRight } from 'lucide-react';
+import { getAssetUrl } from '../../utils/assetHelper';
 
 export const ProductCard = ({
   product,
@@ -67,7 +68,7 @@ export const ProductCard = ({
         {/* Authentic Runway Video Preview or Editorial Image */}
         {product.videoUrl ? (
           <video
-            src={product.videoUrl}
+            src={getAssetUrl(product.videoUrl)}
             autoPlay
             loop
             muted
@@ -82,7 +83,7 @@ export const ProductCard = ({
           />
         ) : (
           <img
-            src={(product.images && product.images[0]) ? product.images[0] : '/placeholder-luxury.svg'}
+            src={getAssetUrl((product.images && product.images[0]) ? product.images[0] : '/placeholder-luxury.svg')}
             alt={title}
             loading="lazy"
             style={{

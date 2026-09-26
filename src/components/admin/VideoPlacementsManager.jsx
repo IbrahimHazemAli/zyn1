@@ -16,6 +16,7 @@ import {
   ArrowRight,
   Layers
 } from 'lucide-react';
+import { getAssetUrl } from '../../utils/assetHelper';
 
 const BOUTIQUE_ARCHIVE_VIDEOS = [
   { id: 'couture-6998', name: 'إطلالة كوتور الملكية - كود 6998', url: '/videos/showcase-couture-6998.mp4' },
@@ -322,7 +323,7 @@ export const VideoPlacementsManager = ({ onBackToStore, onNavigate }) => {
                   {activeVideo ? (
                     <video
                       key={activeVideo}
-                      src={activeVideo}
+                      src={getAssetUrl(activeVideo)}
                       autoPlay
                       loop
                       muted

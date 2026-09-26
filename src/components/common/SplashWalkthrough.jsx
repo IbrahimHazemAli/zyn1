@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { Sparkles, ArrowRight } from 'lucide-react';
+import { getAssetUrl } from '../../utils/assetHelper';
 
 export const SplashWalkthrough = ({ onComplete }) => {
   const { t, isRtl } = useLanguage();
@@ -83,7 +84,7 @@ export const SplashWalkthrough = ({ onComplete }) => {
         {phase === 1 && (
           <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <img
-              src="/logo.png"
+              src={getAssetUrl('/logo.png')}
               alt="Sanaria Fashion Logo"
               style={{
                 height: '72px',

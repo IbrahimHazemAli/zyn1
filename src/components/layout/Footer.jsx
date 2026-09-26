@@ -2,7 +2,6 @@ import React from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useStore } from '../../context/StoreContext';
 import {
-  Instagram,
   Phone,
   PackageCheck,
   MapPin,
@@ -10,6 +9,8 @@ import {
   ShieldCheck,
   Truck
 } from 'lucide-react';
+import { InstagramIcon } from '../common/SocialIcons';
+import { getAssetUrl } from '../../utils/assetHelper';
 
 export const Footer = ({ onNavigate, onReplayIntro, onOpenOrderTracking }) => {
   const { t, openChangeLanguageModal, isRtl } = useLanguage();
@@ -95,7 +96,7 @@ export const Footer = ({ onNavigate, onReplayIntro, onOpenOrderTracking }) => {
           {/* Column 1: Brand Info */}
           <div style={{ maxWidth: '300px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-              <img src="/logo.png" alt="Sanaria Fashion Logo" style={{ height: '44px', width: 'auto' }} />
+              <img src={getAssetUrl('/logo.png')} alt="Sanaria Fashion Logo" style={{ height: '44px', width: 'auto' }} />
               <div>
                 <span
                   style={{
@@ -148,7 +149,7 @@ export const Footer = ({ onNavigate, onReplayIntro, onOpenOrderTracking }) => {
                   e.currentTarget.style.color = '#C5A880';
                 }}
               >
-                <Instagram size={17} />
+                <InstagramIcon size={17} />
               </a>
 
             </div>

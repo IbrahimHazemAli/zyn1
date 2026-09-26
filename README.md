@@ -4,8 +4,8 @@
 
 ---
 
-## 🌐 Production Domain
-- **Live URL:** [http://sanaria.waifly.com](http://sanaria.waifly.com)
+## 🌐 Production Domain & Deployment
+- **Live Website (GitHub Pages):** [https://ibrahimhazemali.github.io/zyn1/](https://ibrahimhazemali.github.io/zyn1/)
 - **Repository:** [https://github.com/IbrahimHazemAli/zyn1](https://github.com/IbrahimHazemAli/zyn1)
 
 ---
@@ -55,7 +55,7 @@ Production assets will be generated in the `dist/` directory, ready to deploy to
 ## 🔐 Admin Access
 To access the Admin Portal, navigate to:
 ```
-http://sanaria.waifly.com/#admin
+https://ibrahimhazemali.github.io/zyn1/#admin
 ```
 or locally at:
 ```

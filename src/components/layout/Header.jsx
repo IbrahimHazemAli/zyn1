@@ -16,6 +16,7 @@ import {
   Film,
   Package
 } from 'lucide-react';
+import { getAssetUrl } from '../../utils/assetHelper';
 
 export const Header = ({
   onNavigate,
@@ -243,7 +244,7 @@ export const Header = ({
           >
             <div className="seneria-brand-anchor">
               <img
-                src="/logo.png"
+                src={getAssetUrl('/logo.png')}
                 alt="Sanaria Fashion Logo"
                 className="seneria-brand-logo"
               />
@@ -368,7 +369,7 @@ export const Header = ({
                   onNavigate('home');
                 }}
               >
-                <img src="/logo.png" alt="Sanaria Logo" className="seneria-drawer-logo" />
+                <img src={getAssetUrl('/logo.png')} alt="Sanaria Logo" className="seneria-drawer-logo" />
                 <div>
                   <span className="seneria-drawer-title">SANARIA FASHION</span>
                   <span className="seneria-drawer-subtitle">SINCE 1992</span>

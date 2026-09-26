@@ -6,6 +6,7 @@ import { useToast } from '../context/ToastContext';
 import { ProductCard } from '../components/shop/ProductCard';
 import { STANDARD_SIZES } from '../components/shop/SelectSizeModal';
 import { FullscreenImageViewer } from '../components/shop/FullscreenImageViewer';
+import { getAssetUrl } from '../utils/assetHelper';
 import {
   ShoppingBag,
   Zap,
@@ -234,7 +235,7 @@ export const ProductDetailPage = ({
                 <div style={{ position: 'relative', width: '100%', height: '100%', backgroundColor: '#000000' }}>
                   <video
                     ref={pdpVideoRef}
-                    src={product.videoUrl}
+                    src={getAssetUrl(product.videoUrl)}
                     autoPlay
                     loop
                     muted={isVideoMuted}

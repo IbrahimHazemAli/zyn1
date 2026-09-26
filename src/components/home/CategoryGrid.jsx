@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useStore } from '../../context/StoreContext';
 import { ArrowRight } from 'lucide-react';
+import { getAssetUrl } from '../../utils/assetHelper';
 
 export const CategoryGrid = ({ onSelectCategory, onNavigateShop }) => {
   const { language, isRtl } = useLanguage();
@@ -40,27 +41,27 @@ export const CategoryGrid = ({ onSelectCategory, onNavigateShop }) => {
       // 1. Explicit admin choice from Video Placements manager
       const customPlacement = editorialPlacements?.[panelKey];
       if (customPlacement?.videoUrl && customPlacement.videoUrl.trim() !== '') {
-        return { type: 'video', src: customPlacement.videoUrl };
+        return { type: 'video', src: getAssetUrl(customPlacement.videoUrl) };
       }
       if (customPlacement?.imageUrl && customPlacement.imageUrl.trim() !== '') {
-        return { type: 'image', src: customPlacement.imageUrl };
+        return { type: 'image', src: getAssetUrl(customPlacement.imageUrl) };
       }
 
       // 2. Product explicitly marked with this placement
       const assignedProduct = list.find(p => p.videoPlacement === panelKey);
       if (assignedProduct) {
-        if (assignedProduct.images?.[0]) return { type: 'image', src: assignedProduct.images[0] };
-        if (assignedProduct.videoUrl) return { type: 'video', src: assignedProduct.videoUrl };
+        if (assignedProduct.images?.[0]) return { type: 'image', src: getAssetUrl(assignedProduct.images[0]) };
+        if (assignedProduct.videoUrl) return { type: 'video', src: getAssetUrl(assignedProduct.videoUrl) };
       }
 
       // 3. Fallback to matched product or boutique default
       if (product?.images && product.images.length > 0 && product.images[0]) {
-        return { type: 'image', src: product.images[0] };
+        return { type: 'image', src: getAssetUrl(product.images[0]) };
       }
       if (product?.videoUrl && product.videoUrl.trim() !== '') {
-        return { type: 'video', src: product.videoUrl };
+        return { type: 'video', src: getAssetUrl(product.videoUrl) };
       }
-      return { type: 'video', src: fallbackVideoUrl };
+      return { type: 'video', src: getAssetUrl(fallbackVideoUrl) };
     };
 
     return [

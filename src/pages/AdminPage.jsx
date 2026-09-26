@@ -5,6 +5,7 @@ import { AdminLogin } from '../components/admin/AdminLogin';
 import { OrderPrintInvoice } from '../components/admin/OrderPrintInvoice';
 import { storeUploadedVideoFile } from '../utils/mediaStorage';
 import { VideoPlacementsManager } from '../components/admin/VideoPlacementsManager';
+import { getAssetUrl } from '../utils/assetHelper';
 import {
   Plus,
   Package,
@@ -756,7 +757,7 @@ const AdminDashboard = ({ onBackToStore, onNavigate, onSelectProduct }) => {
             onClick={() => setCurrentView('home')}
             style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}
           >
-            <img src="/logo.png" alt="Seneria Fashion" style={{ height: '42px', width: 'auto' }} />
+            <img src={getAssetUrl('/logo.png')} alt="Seneria Fashion" style={{ height: '42px', width: 'auto' }} />
             <div>
               <div style={{ fontFamily: "'Cinzel', 'Amiri', serif", fontSize: '1.15rem', fontWeight: 700, letterSpacing: '0.08em', color: '#FAF8F5' }}>
                 SENERIA FASHION

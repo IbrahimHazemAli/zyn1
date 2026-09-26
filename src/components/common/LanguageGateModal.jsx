@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLanguage, LANGUAGES } from '../../context/LanguageContext';
 import { ArrowRight, ArrowLeft, Check, X, Sparkles, ShieldCheck } from 'lucide-react';
+import { getAssetUrl } from '../../utils/assetHelper';
 
 export const LanguageGateModal = ({ isChangeMode = false, onClose }) => {
   const { language, selectLanguage, isRtl } = useLanguage();
@@ -152,7 +153,7 @@ export const LanguageGateModal = ({ isChangeMode = false, onClose }) => {
             }}
           >
             <img
-              src="/logo.png"
+              src={getAssetUrl('/logo.png')}
               alt="Sanaria Fashion Since 1992"
               style={{ width: '100%', height: '100%', objectFit: 'contain' }}
             />

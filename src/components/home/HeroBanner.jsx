@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useStore } from '../../context/StoreContext';
+import { getAssetUrl } from '../../utils/assetHelper';
 import { ArrowRight, Volume2, VolumeX, Play, Pause, Film } from 'lucide-react';
 
 export const HeroBanner = ({ onNavigateShop, onExplore }) => {
@@ -72,7 +73,7 @@ export const HeroBanner = ({ onNavigateShop, onExplore }) => {
           loop
           muted={isMuted}
           playsInline
-          src={effectiveVideoUrl}
+          src={getAssetUrl(effectiveVideoUrl)}
           style={{
             position: 'absolute',
             inset: 0,

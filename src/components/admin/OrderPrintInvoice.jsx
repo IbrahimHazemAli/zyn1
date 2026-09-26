@@ -1,5 +1,6 @@
 import React from 'react';
 import { Printer, X, MapPin, Phone, Calendar, Clock, CheckSquare } from 'lucide-react';
+import { getAssetUrl } from '../../utils/assetHelper';
 
 export const OrderPrintInvoice = ({ order, orders = [], onClose }) => {
   const printList = order ? [order] : orders;
@@ -162,7 +163,7 @@ export const OrderPrintInvoice = ({ order, orders = [], onClose }) => {
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                       <img
-                        src="/logo.png"
+                        src={getAssetUrl('/logo.png')}
                         alt="Seneria Fashion"
                         style={{ height: '54px', width: 'auto' }}
                       />

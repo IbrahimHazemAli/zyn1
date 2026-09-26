@@ -12,6 +12,7 @@ import {
   ChevronRight,
   Eye
 } from 'lucide-react';
+import { getAssetUrl } from '../../utils/assetHelper';
 
 export const RunwayReelsShowcase = ({ onSelectProduct, onNavigateDiscover, onQuickAdd }) => {
   const { language, isRtl } = useLanguage();
@@ -282,7 +283,7 @@ export const RunwayReelsShowcase = ({ onSelectProduct, onNavigateDiscover, onQui
                 {/* Video Element */}
                 <video
                   ref={(el) => (videoRefs.current[item.id] = el)}
-                  src={item.videoUrl}
+                  src={getAssetUrl(item.videoUrl)}
                   loop
                   muted={!isSoundOn}
                   playsInline

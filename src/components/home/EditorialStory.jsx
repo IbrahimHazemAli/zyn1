@@ -2,6 +2,7 @@ import React from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useStore } from '../../context/StoreContext';
 import { Award } from 'lucide-react';
+import { getAssetUrl } from '../../utils/assetHelper';
 
 export const EditorialStory = ({ onNavigateAbout }) => {
   const { t, isRtl } = useLanguage();
@@ -113,7 +114,7 @@ export const EditorialStory = ({ onNavigateAbout }) => {
                 />
               ) : (
                 <video
-                  src="/videos/showcase-couture-6998.mp4"
+                  src={getAssetUrl('/videos/showcase-couture-6998.mp4')}
                   autoPlay
                   loop
                   muted

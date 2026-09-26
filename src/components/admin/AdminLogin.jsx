@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { Lock, Shield, ArrowRight, AlertCircle } from 'lucide-react';
+import { getAssetUrl } from '../../utils/assetHelper';
 
 export const AdminLogin = ({ onLoginSuccess, onBackToStore }) => {
   const { loginAdmin } = useStore();
@@ -54,7 +55,7 @@ export const AdminLogin = ({ onLoginSuccess, onBackToStore }) => {
         {/* Brand Header */}
         <div style={{ marginBottom: '28px' }}>
           <img
-            src="/logo.png"
+            src={getAssetUrl('/logo.png')}
             alt="Sanaria Fashion"
             style={{ height: '64px', width: 'auto', margin: '0 auto 16px auto' }}
           />
