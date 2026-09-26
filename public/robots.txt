@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin
 
-Sitemap: https://ibrahimhazemali.github.io/zyn1/sitemap.xml
+Sitemap: https://sanaria.waifly.com/sitemap.xml
